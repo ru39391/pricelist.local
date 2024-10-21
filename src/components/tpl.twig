@@ -1,0 +1,50 @@
+<div class="price-wrapper__inner js-price-list">
+{% for data in list %}
+  <div class="item">
+    <div class="open-title open">
+      <span><img src="/images/arrow-green.png" alt="" /></span>
+      {{ data.name }}
+    </div>
+
+    <div class="open-cont" style="display: block;">
+    {% if data.pricelist|length > 0 %}
+      <div class="item">
+        <table class="hidden-table">
+          <tbody>
+            {% for item in data.pricelist %}
+            <tr>
+              <td>{{ item.name }}</td>
+              <td class="text-right">{{ item.price }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+    {% for group in data.groups %}
+      <div class="item">
+        <table class="hidden-table">
+          <tbody>
+            <tr class="no-border">
+              <td><b>{{ group.name }}</b></td>
+              <td>&nbsp;</td>
+            </tr>
+            {% for item in group.pricelist %}
+            <tr>
+              <td>{{ item.name }}</td>
+              <td class="text-right">{{ item.price }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+{% endfor %}
+</div>
+
+<button class="price-wrapper__btn" type="button">
+  <span class="price-wrapper__btn-show">Показать прейскурант</span>
+  <span class="price-wrapper__btn-hide">Скрыть прейскурант</span>
+</button>

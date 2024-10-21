@@ -1,9 +1,8 @@
 /**
 * Имитация API для тестирования форм
-* @param {String} data - данные формы
 * @returns {Object} - объект данных формы
 */
-function handleSubdepts(data) {
+function handleSubdepts() {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve({

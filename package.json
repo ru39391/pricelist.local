@@ -9,10 +9,12 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/twig": "^1.12.16",
     "typescript": "^5.5.3",
     "vite": "^5.4.8"
   },
   "dependencies": {
-    "axios": "^1.7.7"
+    "axios": "^1.7.7",
+    "twig": "^1.17.1"
   }
 }

@@ -1,9 +1,8 @@
 /**
 * Имитация API для тестирования форм
-* @param {String} data - данные формы
 * @returns {Object} - объект данных формы
 */
-function handleGroups(data) {
+function handleGroups() {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve({

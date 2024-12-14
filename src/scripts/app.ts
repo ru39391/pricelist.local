@@ -13,11 +13,14 @@ const initPriceRenderer = () => {
     return;
   }
 
+  const { path } = priceWrapper.dataset;
   const pricelist = new Pricelist({
     data: Object.entries(priceWrapper.dataset) as string[][],
-    tplPath: '../src/components/tpl.twig',
+    tplPath: path as string,
     wrapper: priceWrapper
   });
+
+  return pricelist;
 }
 
 export default initPriceRenderer;

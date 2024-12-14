@@ -14,7 +14,9 @@ const IS_COMPLEX_DATA_KEY = 'isComplexData';
 const IS_GROUP_IGNORED_KEY = 'isGroupIgnored';
 const IS_GROUP_USED_KEY = 'isGroupUsed';
 
-const API_URL = 'http://stomistok.local/api/';
+const ROOT_PATH = import.meta.env.VITE_ROOT_PATH;
+const SITE_URL = import.meta.env.VITE_SITE_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 export {
   ID_KEY,
@@ -30,5 +32,7 @@ export {
   IS_COMPLEX_DATA_KEY,
   IS_GROUP_IGNORED_KEY,
   IS_GROUP_USED_KEY,
+  ROOT_PATH,
+  SITE_URL,
   API_URL
 }

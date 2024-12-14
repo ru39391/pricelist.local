@@ -13,7 +13,8 @@ import {
   PRICELIST_KEY,
   CONFIG_KEY,
   IS_GROUP_IGNORED_KEY,
-  IS_GROUP_USED_KEY
+  IS_GROUP_USED_KEY,
+  API_URL
 } from '../utils/constants';
 import type {
   TCustomData,
@@ -21,13 +22,9 @@ import type {
   TDeptData,
   TSubdeptData,
   TGroupData,
-  TPricelistData
+  TPricelistData,
+  TPricelistKeys
 } from '../utils/types';
-
-import handleDepts from '../utils/depts';
-import handleSubdepts from '../utils/subdepts';
-import handleGroups from '../utils/groups';
-import handlePricelist from '../utils/pricelist';
 
 type TPricelistOptions = {
   data: string[][];
@@ -39,15 +36,15 @@ type TPricelistOptions = {
  * Рендеринг списка услуг
  */
 class Pricelist {
-  config: TCustomData<boolean>;
-  itemsData: TCustomData<number[]>;
-  keys: string[];
-  tplPath: string;
-  wrapper: Element;
-  depts: TDeptData[];
-  subdepts: TSubdeptData[];
-  groups: TGroupData[];
-  pricelist: TPricelistData[];
+  config: TCustomData<boolean> = {};
+  itemsData = {} as Record<TPricelistKeys, number[]>;
+  keys: TPricelistKeys[] = [];
+  tplPath: string = '../src/components/tpl.twig';
+  wrapper: Element | null = null;
+  depts: TDeptData[] = [];
+  subdepts: TSubdeptData[] = [];
+  groups: TGroupData[] = [];
+  pricelist: TPricelistData[] = [];
 
   constructor(options: TPricelistOptions) {
     this.keys = [DEPTS_KEY, SUBDEPTS_KEY, GROUPS_KEY, PRICELIST_KEY];
@@ -76,7 +73,7 @@ class Pricelist {
       (acc, key) => ({
         ...acc,
         [key]: JSON.parse(Object.fromEntries(data)[key])
-      }), {}
+      }), {} as Record<TPricelistKeys, number[]>
     );
     this.tplPath = tplPath;
     this.wrapper = wrapper;
@@ -116,7 +113,10 @@ class Pricelist {
     );
 
     // console.log(subdepts);
-    this.wrapper.append(body.querySelector('.js-price-list') as Node);
+    if(this.wrapper) {
+      this.wrapper.append(body.querySelector('.js-price-list') as Node);
+      this.wrapper.append(body.querySelector('.js-price-btn') as Node);
+    }
   }
 
   /**
@@ -146,25 +146,19 @@ class Pricelist {
   /**
    * Получение данных элементов по их идентификаторам
    */
-  async fetchData(payload: TCustomData<number[]>): Promise<boolean | undefined> {
+  async fetchData(payload: Record<TPricelistKeys, number[]>): Promise<boolean | undefined> {
     try {
-      // keys.map(type => axios.get(`${API_URL}${type}`))
       let isSucceed = false;
-      const response = await Promise.all([
-        handleDepts(),
-        handleSubdepts(),
-        handleGroups(),
-        handlePricelist()
-      ]);
-      const isResSucceed: boolean = response.reduce((acc: boolean, { success }: { success: boolean; }) => acc && success, true);
-      const items: TItemData[][] = response.map(({ data }: { data: TItemData[]; }) => data);
+      const response = await Promise.all(Object.keys(payload).map(type => axios.get(`${API_URL}${type}`)));
+      const isResSucceed: boolean = response.reduce((acc: boolean, { data }) => acc && data.success, true);
+      const items: TItemData[][] = response.map(({ data }) => data.data);
 
       if(isResSucceed) {
         this.keys.forEach(
           (key, index) => this[key] = this.setData(
             key,
             items[index].filter(item => payload[key].includes(item[ID_KEY] as number))
-          )
+          ) as TDeptData[] & TSubdeptData[] & TGroupData[] & TPricelistData[]
         );
       }
 

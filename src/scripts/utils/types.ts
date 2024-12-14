@@ -4,6 +4,8 @@ import {
   PRICE_KEY,
   SUBDEPT_KEY,
   GROUP_KEY,
+  DEPTS_KEY,
+  SUBDEPTS_KEY,
   GROUPS_KEY,
   PRICELIST_KEY
 } from '../utils/constants';
@@ -13,6 +15,8 @@ export type TCustomData<T> = {
 }
 
 export type TItemData = TCustomData<string | number>;
+
+export type TPricelistKeys = typeof DEPTS_KEY | typeof SUBDEPTS_KEY | typeof GROUPS_KEY | typeof PRICELIST_KEY;
 
 export type TPricelistData = {
   [ID_KEY]: number;

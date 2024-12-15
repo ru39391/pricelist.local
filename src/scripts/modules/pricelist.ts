@@ -88,7 +88,7 @@ class Pricelist {
   /**
    * Отрисовка данных на странице
    */
-  renderData(tpl: Template) {
+  renderData(tpl: Template): Node {
     const parser = new DOMParser();
     const groups = this.groups.map(item => ({
       ...item,
@@ -112,11 +112,21 @@ class Pricelist {
       'text/html'
     );
 
+    const [
+      container,
+      toggler
+    ] = [
+      body.querySelector('.js-price-list') as Node,
+      body.querySelector('.js-price-btn') as Node
+    ];
+
     // console.log(subdepts);
     if(this.wrapper) {
-      this.wrapper.append(body.querySelector('.js-price-list') as Node);
-      this.wrapper.append(body.querySelector('.js-price-btn') as Node);
+      this.wrapper.append(container);
+      this.wrapper.append(toggler);
     }
+
+    return toggler;
   }
 
   /**
@@ -149,6 +159,7 @@ class Pricelist {
   async fetchData(payload: Record<TPricelistKeys, number[]>): Promise<boolean | undefined> {
     try {
       let isSucceed = false;
+      // TODO: продумать лучшую конфигурацию для сокращения массива получаемых данных
       const response = await Promise.all(Object.keys(payload).map(type => axios.get(`${API_URL}${type}`)));
       const isResSucceed: boolean = response.reduce((acc: boolean, { data }) => acc && data.success, true);
       const items: TItemData[][] = response.map(({ data }) => data.data);
@@ -183,6 +194,15 @@ class Pricelist {
   }
 
   /**
+   * Установка слушателя события на кнопку
+   */
+  toggleList(event: Event) {
+    event.preventDefault();
+
+    this.wrapper?.classList.toggle('active');
+  }
+
+  /**
    * Обработка массива идентификаторов
    */
   async handleData() {
@@ -193,7 +213,9 @@ class Pricelist {
       ]);
 
       if(isSucceed) {
-        this.renderData(tpl as Template);
+        const toggler = this.renderData(tpl as Template);
+
+        toggler.addEventListener('click', this.toggleList.bind(this))
       }
     } catch(err) {
       console.error(err);

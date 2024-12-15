@@ -2,7 +2,7 @@ import './styles/style.css';
 import initPriceRenderer from './scripts/app.ts';
 
 /*
-document.querySelector<HTMLDivElement>('body')!.innerHTML = `
+document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div
     class="price-wrapper js-price-wrapper"
     data-depts="[4]"

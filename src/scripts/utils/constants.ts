@@ -1,6 +1,7 @@
 const ID_KEY = 'item_id';
 const NAME_KEY = 'name';
 const PRICE_KEY = 'price';
+const INDEX_KEY = 'index';
 const SUBDEPT_KEY = 'subdept';
 const GROUP_KEY = 'group';
 
@@ -23,6 +24,7 @@ export {
   ID_KEY,
   NAME_KEY,
   PRICE_KEY,
+  INDEX_KEY,
   SUBDEPT_KEY,
   GROUP_KEY,
   DEPTS_KEY,

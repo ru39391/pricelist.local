@@ -5,6 +5,7 @@ import {
   ID_KEY,
   NAME_KEY,
   PRICE_KEY,
+  INDEX_KEY,
   SUBDEPT_KEY,
   GROUP_KEY,
   DEPTS_KEY,
@@ -17,6 +18,7 @@ import {
   IS_VISIBLE_KEY,
   API_URL
 } from '../utils/constants';
+import { sortArr }  from '../utils';
 import type {
   TCustomData,
   TItemData,
@@ -143,7 +145,9 @@ class Pricelist {
    * Обработка данных выборки
    */
   setData(key: string, arr: TItemData[]) {
-    const array = key === PRICELIST_KEY ? arr.filter(item => Boolean(item[IS_VISIBLE_KEY])) : arr;
+    const array = key === PRICELIST_KEY
+      ? sortArr(arr.filter(item => Boolean(item[IS_VISIBLE_KEY])), INDEX_KEY)
+      : arr;
 
     return array.map(item => ({
       [ID_KEY]: item[ID_KEY],

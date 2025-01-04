@@ -14,6 +14,7 @@ import {
   CONFIG_KEY,
   IS_GROUP_IGNORED_KEY,
   IS_GROUP_USED_KEY,
+  IS_VISIBLE_KEY,
   API_URL
 } from '../utils/constants';
 import type {
@@ -142,7 +143,9 @@ class Pricelist {
    * Обработка данных выборки
    */
   setData(key: string, arr: TItemData[]) {
-    return arr.map(item => ({
+    const array = key === PRICELIST_KEY ? arr.filter(item => Boolean(item[IS_VISIBLE_KEY])) : arr;
+
+    return array.map(item => ({
       [ID_KEY]: item[ID_KEY],
       [NAME_KEY]: item[NAME_KEY],
       ...this.isParamExist(item, PRICE_KEY),
